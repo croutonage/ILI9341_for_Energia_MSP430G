@@ -100,8 +100,8 @@ public:
 	void fillScreen(void);
 	INT8U readID(void);
 
-	void drawChar(INT8U ascii,INT16U poX, INT16U poY,INT16U size, INT16U fgcolor);
-	void drawString(char *string,INT16U poX, INT16U poY,INT16U size,INT16U fgcolor);
+	void drawChar(INT8U ascii,INT16U poX, INT16U poY,INT16U size, INT16U fgcolor, INT16U bgcolor);
+	void drawString(char *string,INT16U poX, INT16U poY,INT16U size,INT16U fgcolor, INT16U bgcolor);
 	void fillRectangle(INT16U poX, INT16U poY, INT16U length, INT16U width, INT16U color);
 
 	void drawLine(INT16U x0,INT16U y0,INT16U x1,INT16U y1,INT16U color);
@@ -113,9 +113,9 @@ public:
 	void fillCircle(int poX, int poY, int r,INT16U color);
 
 	void drawTraingle(int poX1, int poY1, int poX2, int poY2, int poX3, int poY3, INT16U color);
-	INT8U drawNumber(long long_num,INT16U poX, INT16U poY,INT16U size,INT16U fgcolor);
-	INT8U drawFloat(float floatNumber,INT8U decimal,INT16U poX, INT16U poY,INT16U size,INT16U fgcolor);
-	INT8U drawFloat(float floatNumber,INT16U poX, INT16U poY,INT16U size,INT16U fgcolor);
+	INT8U drawNumber(long long_num,INT16U poX, INT16U poY,INT16U size,INT16U fgcolor, INT16U bgcolor);
+	INT8U drawFloat(float floatNumber,INT8U decimal,INT16U poX, INT16U poY,INT16U size,INT16U fgcolor, INT16U bgcolor);
+	INT8U drawFloat(float floatNumber,INT16U poX, INT16U poY,INT16U size,INT16U fgcolor, INT16U bgcolor);
 
 };
 

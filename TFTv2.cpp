@@ -332,7 +332,7 @@ void TFT::setPixel(INT16U poX, INT16U poY,INT16U color)
     sendData(color);
 }
 
-void TFT::drawChar( INT8U ascii, INT16U poX, INT16U poY,INT16U size, INT16U fgcolor)
+void TFT::drawChar( INT8U ascii, INT16U poX, INT16U poY,INT16U size, INT16U fgcolor, INT16U bgcolor)
 {
     if((ascii>=32)&&(ascii<=127))
     {
@@ -343,24 +343,25 @@ void TFT::drawChar( INT8U ascii, INT16U poX, INT16U poY,INT16U size, INT16U fgco
         ascii = '?'-32;
     }
     for (int i =0; i<FONT_X; i++ ) {
-        INT8U temp = simpleFont[ascii-0x20][i];
-        for(INT8U f=0;f<8;f++)
+        uint8_t temp = simpleFont[ascii-0x20][i];
+        for(uint8_t f=0;f<8;f++)
         {
             if((temp>>f)&0x01)
             {
                 fillRectangle(poX+i*size, poY+f*size, size, size, fgcolor);
             }
+        else
+        fillRectangle(poX+i*size, poY+f*size, size, size, bgcolor);
 
         }
 
     }
 }
-
-void TFT::drawString(char *string,INT16U poX, INT16U poY, INT16U size,INT16U fgcolor)
+void TFT::drawString(char *string,INT16U poX, INT16U poY, INT16U size,INT16U fgcolor, INT16U bgcolor)
 {
     while(*string)
     {
-        drawChar(*string, poX, poY, size, fgcolor);
+        drawChar(*string, poX, poY, size, fgcolor, bgcolor);
         *string++;
 
         if(poX < MAX_X)
@@ -469,7 +470,7 @@ void TFT::drawTraingle( int poX1, int poY1, int poX2, int poY2, int poX3, int po
     drawLine(poX2, poY2, poX3, poY3,color);
 }
 
-INT8U TFT::drawNumber(long long_num,INT16U poX, INT16U poY,INT16U size,INT16U fgcolor)
+INT8U TFT::drawNumber(long long_num,INT16U poX, INT16U poY,INT16U size,INT16U fgcolor, INT16U bgcolor)
 {
     INT8U char_buffer[10] = "";
     INT8U i = 0;
@@ -478,7 +479,7 @@ INT8U TFT::drawNumber(long long_num,INT16U poX, INT16U poY,INT16U size,INT16U fg
     if (long_num < 0)
     {
         f=1;
-        drawChar('-',poX, poY, size, fgcolor);
+        drawChar('-',poX, poY, size, fgcolor, bgcolor);
         long_num = -long_num;
         if(poX < MAX_X)
         {
@@ -488,7 +489,7 @@ INT8U TFT::drawNumber(long long_num,INT16U poX, INT16U poY,INT16U size,INT16U fg
     else if (long_num == 0)
     {
         f=1;
-        drawChar('0',poX, poY, size, fgcolor);
+        drawChar('0',poX, poY, size, fgcolor, bgcolor);
         return f;
         if(poX < MAX_X)
         {
@@ -506,7 +507,7 @@ INT8U TFT::drawNumber(long long_num,INT16U poX, INT16U poY,INT16U size,INT16U fg
     f = f+i;
     for(; i > 0; i--)
     {
-        drawChar('0'+ char_buffer[i - 1],poX, poY, size, fgcolor);
+        drawChar('0'+ char_buffer[i - 1],poX, poY, size, fgcolor, bgcolor);
         if(poX < MAX_X)
         {
             poX+=FONT_SPACE*size;                                       /* Move cursor right            */
@@ -515,7 +516,8 @@ INT8U TFT::drawNumber(long long_num,INT16U poX, INT16U poY,INT16U size,INT16U fg
     return f;
 }
 
-INT8U TFT::drawFloat(float floatNumber,INT8U decimal,INT16U poX, INT16U poY,INT16U size,INT16U fgcolor)
+
+INT8U TFT::drawFloat(float floatNumber,INT8U decimal,INT16U poX, INT16U poY,INT16U size,INT16U fgcolor, INT16U bgcolor)
 {
     INT16U temp=0;
     float decy=0.0;
@@ -523,7 +525,7 @@ INT8U TFT::drawFloat(float floatNumber,INT8U decimal,INT16U poX, INT16U poY,INT1
     INT8U f=0;
     if(floatNumber<0.0)
     {
-        drawChar('-',poX, poY, size, fgcolor);
+        drawChar('-',poX, poY, size, fgcolor, bgcolor);
         floatNumber = -floatNumber;
         if(poX < MAX_X)
         {
@@ -538,7 +540,7 @@ INT8U TFT::drawFloat(float floatNumber,INT8U decimal,INT16U poX, INT16U poY,INT1
     floatNumber += rounding;
 
     temp = (INT16U)floatNumber;
-    INT8U howlong=drawNumber(temp,poX, poY, size, fgcolor);
+    INT8U howlong=drawNumber(temp,poX, poY, size, fgcolor, bgcolor);
     f += howlong;
     if((poX+8*size*howlong) < MAX_X)
     {
@@ -547,7 +549,7 @@ INT8U TFT::drawFloat(float floatNumber,INT8U decimal,INT16U poX, INT16U poY,INT1
 
     if(decimal>0)
     {
-        drawChar('.',poX, poY, size, fgcolor);
+        drawChar('.',poX, poY, size, fgcolor, bgcolor);
         if(poX < MAX_X)
         {
             poX+=FONT_SPACE*size;                                       /* Move cursor right            */
@@ -559,7 +561,7 @@ INT8U TFT::drawFloat(float floatNumber,INT8U decimal,INT16U poX, INT16U poY,INT1
     {
         decy *=10;                                                      /* for the next decimal         */
         temp = decy;                                                    /* get the decimal              */
-        drawNumber(temp,poX, poY, size, fgcolor);
+        drawNumber(temp,poX, poY, size, fgcolor, bgcolor);
         floatNumber = -floatNumber;
         if(poX < MAX_X)
         {
@@ -571,7 +573,7 @@ INT8U TFT::drawFloat(float floatNumber,INT8U decimal,INT16U poX, INT16U poY,INT1
     return f;
 }
 
-INT8U TFT::drawFloat(float floatNumber,INT16U poX, INT16U poY,INT16U size,INT16U fgcolor)
+INT8U TFT::drawFloat(float floatNumber,INT16U poX, INT16U poY,INT16U size,INT16U fgcolor, INT16U bgcolor)
 {
     INT8U decimal=2;
     INT16U temp=0;
@@ -580,7 +582,7 @@ INT8U TFT::drawFloat(float floatNumber,INT16U poX, INT16U poY,INT16U size,INT16U
     INT8U f=0;
     if(floatNumber<0.0)                                                 /* floatNumber < 0              */
     {
-        drawChar('-',poX, poY, size, fgcolor);                          /* add a '-'                    */
+        drawChar('-',poX, poY, size, fgcolor, bgcolor);                          /* add a '-'                    */
         floatNumber = -floatNumber;
         if(poX < MAX_X)
         {
@@ -595,7 +597,7 @@ INT8U TFT::drawFloat(float floatNumber,INT16U poX, INT16U poY,INT16U size,INT16U
     floatNumber += rounding;
 
     temp = (INT16U)floatNumber;
-    INT8U howlong=drawNumber(temp,poX, poY, size, fgcolor);
+    INT8U howlong=drawNumber(temp,poX, poY, size, fgcolor, bgcolor);
     f += howlong;
     if((poX+8*size*howlong) < MAX_X)
     {
@@ -605,7 +607,7 @@ INT8U TFT::drawFloat(float floatNumber,INT16U poX, INT16U poY,INT16U size,INT16U
 
     if(decimal>0)
     {
-        drawChar('.',poX, poY, size, fgcolor);
+        drawChar('.',poX, poY, size, fgcolor, bgcolor);
         if(poX < MAX_X)
         {
             poX += FONT_SPACE*size;                                     /* Move cursor right            */
@@ -617,7 +619,7 @@ INT8U TFT::drawFloat(float floatNumber,INT16U poX, INT16U poY,INT16U size,INT16U
     {
         decy *=10;                                                      /* for the next decimal         */
         temp = decy;                                                    /* get the decimal              */
-        drawNumber(temp,poX, poY, size, fgcolor);
+        drawNumber(temp,poX, poY, size, fgcolor, bgcolor);
         floatNumber = -floatNumber;
         if(poX < MAX_X)
         {
