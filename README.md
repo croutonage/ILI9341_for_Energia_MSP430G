@@ -1,5 +1,5 @@
 
-Forked from IBM666/ILI9341libraryforEnergiaMSP430Launchpad, Which is based on Seeed ILI9341 2.2 TFT+SD library
+Forked from IBM666/ILI9341libraryforEnergiaMSP430Launchpad, Which is based on Seeed ILI9341 2.2 TFT+SD library modified by http://forum.43oh.com/user/30597-grahamf72/
 
 This library has removed bgcolor feature found in the stellaris version, which saved some ram and speeds things up.
 However I need frequently updating text, and manually wiping the old characters was a pain for me, so it's in there with this fork.
@@ -12,11 +12,19 @@ http://www.aliexpress.com/item/New-2-2-inch-2-2-240x320-SPI-TFT-LCD-Display-Modu
 Pinout:
 
 P2_0 -> LCD_CS
+
 P1_4 -> LCD_DC
+
 P2_2 -> LCD_LED (pwm capable, can use analogWrite(P2_2, 64) between 0->255 to dim LCD
+
 P1_0 -> LCD_RESET
+
 P1_5 -> LCD_SCK
+
 P1_7 -> LCD_MOSI
+
 P1_6 -> LCD_MISO
+
 VCC -> LCD_VCC
+
 GND -> LCD_GND
