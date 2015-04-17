@@ -1,9 +1,9 @@
 
-Based on IBM666/ILI9341libraryforEnergiaMSP430Launchpad, Which is based on Seeed ILI9341 2.2 TFT+SD library
+Forked from IBM666/ILI9341libraryforEnergiaMSP430Launchpad, Which is based on Seeed ILI9341 2.2 TFT+SD library
 
-IBM666 removed the bgcolor feature, which saved some ram and speeds things up a lot,
-However I need frequently updating text, and manually wiping the old characters was a pain for me, so it's back in with this fork.
-All functions that use a font (text, numbers) now have an extra last parameter, which sets the background color behind the text.
+This library has removed bgcolor feature found in the stellaris version, which saved some ram and speeds things up.
+However I need frequently updating text, and manually wiping the old characters was a pain for me, so it's in there with this fork.
+All functions that use a font (text, numbers) now have an extra last parameter, which sets the background color behind the text. 2 basic examples are included
 
 Applies to this type screen with ILI9341 controller built in. 
 
